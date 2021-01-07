@@ -1,11 +1,16 @@
 package com.example.adventurebook.models;
 
+import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import com.sun.istack.NotNull;
 
 @Entity
@@ -19,6 +24,12 @@ public class AdventureImage {
 	private String location;
 	@NotNull
 	private String describtion;
+
+	private Date currentDate = new Date();;
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "fk_userId")
+	private User user;
 
 	public AdventureImage() {
 	}
@@ -51,6 +62,24 @@ public class AdventureImage {
 
 	public void setDescribtion(String describtion) {
 		this.describtion = describtion;
+	}
+	
+	
+
+	public Date getCurrentDate() {
+		return currentDate;
+	}
+
+	public void setCurrentDate(Date currentDate) {
+		this.currentDate = currentDate;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }
