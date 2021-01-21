@@ -11,10 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import com.sun.istack.NotNull;
 
 @Entity
 @Table(name = "adventureImage")
+@ConfigurationProperties(prefix = "file")
 public class AdventureImage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,7 +30,13 @@ public class AdventureImage {
 	@NotNull
 	private String describtion;
 
-	private Date currentDate = new Date();;
+	private Date currentDate = new Date();
+
+	@Transient
+	private transient String uploadDir;
+	
+	@NotNull
+	private String fileName;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "fk_userId")
@@ -38,6 +49,7 @@ public class AdventureImage {
 		super();
 		this.location = location;
 		this.describtion = describtion;
+		
 	}
 
 	public Long getId() {
@@ -63,8 +75,6 @@ public class AdventureImage {
 	public void setDescribtion(String describtion) {
 		this.describtion = describtion;
 	}
-	
-	
 
 	public Date getCurrentDate() {
 		return currentDate;
@@ -80,6 +90,29 @@ public class AdventureImage {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@Transient
+	public String getUploadDir() {
+		return uploadDir;
+	}
+
+	public void setUploadDir(String uploadDir) {
+		this.uploadDir = uploadDir;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	@Override
+	public String toString() {
+		return "AdventureImage [location=" + location + ", describtion=" + describtion + ", currentDate=" + currentDate
+				+ "]";
 	}
 
 }

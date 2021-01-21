@@ -98,11 +98,5 @@ public class User {
 	}
 	
 	
-	
-	/*public void addAdventure(AdventureImage advendure) {
-		this.adventureImageList.add(advendure);
-		advendure.setUser(this);
-		
-	}*/
 
 }
