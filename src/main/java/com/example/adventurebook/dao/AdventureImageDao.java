@@ -30,6 +30,12 @@ public class AdventureImageDao {
 		entityManager.persist(advImg);
 
 	}
+	/* get all adventure*/
+	@SuppressWarnings("unchecked")
+	public List<AdventureImage> getAllAdventure(){
+		return entityManager.createQuery("from AdventureImage").getResultList();
+	}
+	
 	/*edit adventure*/
 	public void update(AdventureImage adventureImage) {
 		entityManager.merge(adventureImage);
@@ -37,8 +43,9 @@ public class AdventureImageDao {
 	}
 
 	public AdventureImage findAdventureById(Long id) {
-		return (AdventureImage) entityManager.createQuery("from AdventureImage where id= :id").setParameter("id", id)
-				.getSingleResult();
+		AdventureImage adv = (AdventureImage) entityManager.createQuery("from AdventureImage where id= :id").setParameter("id", id).getSingleResult();
+		logger.info("avd***  "+adv.getLocation());
+		return adv;
 	}
 
 	public List<AdventureImage> findAdventureByLocation(String location) {

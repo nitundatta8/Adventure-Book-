@@ -1,6 +1,8 @@
 package com.example.adventurebook.configration;
 
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.example.adventurebook.filter.JwtFilter;
 import com.example.adventurebook.services.CustomUserDetailsService;
@@ -28,10 +33,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	    private JwtFilter jwtFilter;
 	
 	
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth,HttpSecurity http) throws Exception {
         auth.userDetailsService(userDetailsService);
+        http.cors().and();
     }
 	
+  /*  @Override
+    protected void configureCross(HttpSecurity http) throws Exception {
+        http.cors().and();
+            //other config
+    }*/
+ 
+    /*@Bean
+    CorsConfigurationSource corsConfigurationSource() 
+    {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }*/
 	
 	@Bean
     public PasswordEncoder passwordEncoder(){

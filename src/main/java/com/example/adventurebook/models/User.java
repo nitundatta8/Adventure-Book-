@@ -38,6 +38,14 @@ public class User {
 	@JsonIgnore
 	private List<AdventureImage> adventureImageList = new ArrayList<AdventureImage>();
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<Comment> commentList = new ArrayList<Comment>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonIgnore
+	private List<ClickCommision> clickCommisionList = new ArrayList<ClickCommision>();
+
 	public User() {
 	}
 
@@ -96,7 +104,29 @@ public class User {
 	public void setAdventureImageList(List<AdventureImage> adventureImageList) {
 		this.adventureImageList = adventureImageList;
 	}
-	
-	
+
+	public List<Comment> getCommentList() {
+		return commentList;
+	}
+
+	public void setCommentList(List<Comment> commentList) {
+		this.commentList = commentList;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public List<ClickCommision> getClickCommisionList() {
+		return clickCommisionList;
+	}
+
+	public void setClickCommisionList(List<ClickCommision> clickCommisionList) {
+		this.clickCommisionList = clickCommisionList;
+	}
 
 }

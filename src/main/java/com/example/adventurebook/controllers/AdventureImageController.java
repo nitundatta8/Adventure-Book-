@@ -49,7 +49,6 @@ public class AdventureImageController {
 	private AdventureImage adventureImage;
 
 	@PostMapping("/createAdventure")
-	@ResponseBody
 	public UploadFileResponse addAdventure(@RequestParam(value = "location") String location,
 			@RequestParam(value = "describtion") String describtion, Principal principal,
 			@RequestParam("file") MultipartFile file) {
@@ -64,6 +63,12 @@ public class AdventureImageController {
 				.path(fileName).toUriString();
 		return new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
 
+	}
+	
+	@GetMapping("/adventureList")
+	public List<AdventureImage> getAdvetureList(){
+		List<AdventureImage> adventures = adventureImageDao.getAllAdventure();
+		return adventures;
 	}
 
 	@GetMapping("/adventure")
@@ -106,15 +111,14 @@ public class AdventureImageController {
 	}
 
 	@PutMapping("/adventureImgUpdate/{id}")
-	public ResponseEntity<?> update(@RequestBody AdventureImage adventureImage, @PathVariable Long id,Principal principal) {
+	public ResponseEntity<?> update(@RequestBody AdventureImage adventureImage, @PathVariable Long id) {
 		try {
 			AdventureImage existAdventureImage = adventureImageDao.findAdventureById(id);
 			if (existAdventureImage != null) {
 				adventureImage.setId(id);
 				adventureImage.setCurrentDate(existAdventureImage.getCurrentDate());
-				String userName = principal.getName();
-				User user = userdao.findByUserName(userName);
-				adventureImage.setUser(user);
+
+				adventureImage.setUser(existAdventureImage.getUser());
 				adventureImageDao.update(adventureImage);
 			} else {
 				logger.info("Id does not match");
