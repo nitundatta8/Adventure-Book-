@@ -1,5 +1,7 @@
 package com.example.adventurebook.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -22,17 +24,24 @@ public class CommentDao {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	public void addComment(String comment,AdventureImage adventureImage,User user) {
+	public void addComment(Comment comment,User user) {
 		try {
-			Comment curr_comment =new Comment(comment);
-			curr_comment.setUser(user);
-			curr_comment.setAdventureImage(adventureImage);
-			user.getCommentList().add(curr_comment);
-			entityManager.persist(curr_comment);
+			AdventureImage adventureImage =entityManager.find(AdventureImage.class, comment.getAdventureImage().getId());
+			comment.setUser(user);
+			comment.setAdventureImage(adventureImage);
+			user.getCommentList().add(comment);
+			entityManager.persist(comment);
 		}catch(NoResultException e) {
 			logger.info("No result forund for... ");
 		}
 		
+	}
+
+	public List<Comment> findCommentById(Long adventureId) {
+		@SuppressWarnings("unchecked")
+		List<Comment> comments = entityManager.createQuery("from Comment where adventureImage.id= :adventureId")
+		.setParameter("adventureId", adventureId).getResultList();
+		return comments;
 	}
 
 }

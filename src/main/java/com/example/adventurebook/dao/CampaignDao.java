@@ -48,4 +48,11 @@ public class CampaignDao {
 		return entityManager.createQuery("from Campaign").getResultList();
 	}
 
+	public List<Campaign> findProductNameFRCampaign(String brand, String category) {
+		@SuppressWarnings("unchecked")
+		List<Campaign> list =	entityManager.createQuery("from Campaign where brand=:brand and category=:category").setParameter("brand", brand)
+		.setParameter("category", category).getResultList();
+		return list;
+	}
+
 }

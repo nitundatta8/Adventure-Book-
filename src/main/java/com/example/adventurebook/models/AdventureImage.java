@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,7 +25,7 @@ import com.sun.istack.NotNull;
 
 @Entity
 @Table(name = "adventureImage")
-@ConfigurationProperties(prefix = "file")
+@ConfigurationProperties(prefix = "file")   
 public class AdventureImage implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,7 +42,9 @@ public class AdventureImage implements Serializable{
 	private transient String uploadDir;
 
 	@NotNull
-	private String fileName;
+	private String imgUrl;
+	
+	
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "fk_userId")
@@ -118,12 +121,14 @@ public class AdventureImage implements Serializable{
 		this.uploadDir = uploadDir;
 	}
 
-	public String getFileName() {
-		return fileName;
+	
+
+	public String getImgUrl() {
+		return imgUrl;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
 	}
 
 	public List<Comment> getComments() {
@@ -149,6 +154,9 @@ public class AdventureImage implements Serializable{
 	public void setClickCommisionList(List<ClickCommision> clickCommisionList) {
 		this.clickCommisionList = clickCommisionList;
 	}
+	
+	
+
 
 	@Override
 	public String toString() {

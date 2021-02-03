@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +36,7 @@ import com.example.adventurebook.models.User;
 import com.example.adventurebook.services.FileStorageService;
 
 @RestController
-@RequestMapping(value = "/api/AdventureImage")
+@RequestMapping(value = "/api/adventureImage")
 public class AdventureImageController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
@@ -45,24 +46,20 @@ public class AdventureImageController {
 
 	@Autowired
 	private FileStorageService fileStorageService;
-	@Autowired
-	private AdventureImage adventureImage;
+	
 
-	@PostMapping("/createAdventure")
-	public UploadFileResponse addAdventure(@RequestParam(value = "location") String location,
-			@RequestParam(value = "describtion") String describtion, Principal principal,
-			@RequestParam("file") MultipartFile file) {
+	@PostMapping("/createAdventure") //consumes=MediaType.MULTIPART_FORM_DATA_VALUE  UploadFileResponse
+	public ResponseEntity<AdventureImage> addAdventure(@RequestPart(value = "location") String location,
+			@RequestPart(value = "describtion") String describtion, Principal principal,
+			@RequestPart("file") MultipartFile file) {
 		String userName = principal.getName();
 		User user = userdao.findByUserName(userName);
-		logger.info("Location create" + user.getFirstName());
+		
 		String fileName = fileStorageService.storeFile(file);
-
-		adventureImageDao.createAdventureImg(location, describtion, user, fileName);
-
-		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFile/")
-				.path(fileName).toUriString();
-		return new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
-
+/*        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFile/")
+				.path(fileName).toUriString();*/
+		AdventureImage advImg= adventureImageDao.createAdventureImg(location, describtion, user, fileName);
+		return new ResponseEntity<AdventureImage>(advImg,HttpStatus.OK);
 	}
 	
 	@GetMapping("/adventureList")
@@ -71,9 +68,8 @@ public class AdventureImageController {
 		return adventures;
 	}
 
-	@GetMapping("/adventure")
-	@ResponseBody
-	public AdventureImage getAdventure(@RequestParam(value = "id") Long id) {
+	@GetMapping("/{id}")
+	public AdventureImage getAdventure(@PathVariable("id") Long id) {
 
 		AdventureImage adImage = adventureImageDao.findAdventureById(id);
 		return adImage;

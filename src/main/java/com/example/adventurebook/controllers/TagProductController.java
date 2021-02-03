@@ -28,12 +28,6 @@ public class TagProductController {
 	@Autowired
 	private TagProductDao tagDao;
 
-	@Autowired
-	private AdventureImageDao advDao;
-
-	@Autowired
-	private CampaignDao camDao;
-
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@PostMapping(value = "/createTag", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE }, 
@@ -52,7 +46,7 @@ public class TagProductController {
 		return tagProduct;
 	}
 	
-	@GetMapping("/getTag/{adventureId}")
+	@GetMapping("/getTagProductByAdvId/{adventureId}")
 	public List<TagProduct> getTagProductByadventureId(@PathVariable("adventureId")Long adventureId) {
 		List<TagProduct> tagProduct =	tagDao.findTagByadventureId(adventureId);
 		return tagProduct;

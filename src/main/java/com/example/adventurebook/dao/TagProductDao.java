@@ -38,6 +38,7 @@ public class TagProductDao {
 	}
 
 	public List<TagProduct> findTagByadventureId(Long adventureId) {
+		@SuppressWarnings("unchecked")
 		List<TagProduct> tagList=  entityManager.createQuery("from TagProduct where adventureImage.id= :adventureId").setParameter("adventureId", adventureId).getResultList();
 		return tagList;
 	}

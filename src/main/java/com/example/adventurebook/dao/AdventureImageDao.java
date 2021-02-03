@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.example.adventurebook.models.AdventureImage;
+import com.example.adventurebook.models.UploadFileResponse;
 import com.example.adventurebook.models.User;
 
 @Repository
@@ -21,13 +22,15 @@ public class AdventureImageDao {
 	private EntityManager entityManager;
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public void createAdventureImg(String location, String describtion, User user, String fileName) {
+	public AdventureImage createAdventureImg(String location, String describtion, User user, String imgUrl) {
 
 		AdventureImage advImg = new AdventureImage(location, describtion);
 		advImg.setUser(user);
-		advImg.setFileName(fileName);
+		advImg.setImgUrl(imgUrl);
+		
 		user.getAdventureImageList().add(advImg);
 		entityManager.persist(advImg);
+		return advImg;
 
 	}
 	/* get all adventure*/
